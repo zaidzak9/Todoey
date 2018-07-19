@@ -11,10 +11,16 @@ import UIKit
 class TodoViewController: UITableViewController {
     
     var strangerThings = ["Find Mike","Buy eggos","Kill demergogen"]
+    
+    let defaults = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        if let itemsList = defaults.array(forKey: "ToDolist") as? [String]{
+            strangerThings = itemsList
+        }
     }
     
     //MARK - Table view data source
@@ -50,6 +56,8 @@ class TodoViewController: UITableViewController {
         
         let uiaction = UIAlertAction.init(title: "Add Action", style:.default) { (action) in
             self.strangerThings.append(txtfield.text!)
+            
+            self.defaults.set(self.strangerThings, forKey: "ToDolist")
             self.tableView.reloadData()
         }
         
