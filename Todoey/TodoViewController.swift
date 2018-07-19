@@ -10,7 +10,7 @@ import UIKit
 
 class TodoViewController: UITableViewController {
     
-    let strangerThings = ["Find Mike","Buy eggos","Kill demergogen"]
+    var strangerThings = ["Find Mike","Buy eggos","Kill demergogen"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +41,28 @@ class TodoViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         print(strangerThings[indexPath.row])
     }
-
+    
+    @IBAction func UIaddbtn(_ sender: UIBarButtonItem) {
+        
+        var txtfield = UITextField()
+        
+        let uialert = UIAlertController.init(title: "Add ToDo Item", message: nil, preferredStyle: .alert)
+        
+        let uiaction = UIAlertAction.init(title: "Add Action", style:.default) { (action) in
+            self.strangerThings.append(txtfield.text!)
+            self.tableView.reloadData()
+        }
+        
+        uialert.addTextField { (alertTextfield) in
+            alertTextfield.placeholder = "Enter item"
+            txtfield = alertTextfield
+        }
+        
+        uialert.addAction(uiaction)
+        
+        present(uialert, animated: true, completion: nil
+        )
+    }
+    
 }
 
