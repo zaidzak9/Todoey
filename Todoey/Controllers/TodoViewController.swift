@@ -10,7 +10,7 @@ import UIKit
 
 class TodoViewController: UITableViewController {
     
-    var strangerThings = ["Find Mike","Buy eggos","Kill demergogen"]
+    var strangerThings = [Item]()
     
     let defaults = UserDefaults.standard
 
@@ -18,16 +18,32 @@ class TodoViewController: UITableViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        if let itemsList = defaults.array(forKey: "ToDolist") as? [String]{
+        let item1 = Item()
+        item1.title = "Find Mike"
+        strangerThings.append(item1)
+        
+        let item2 = Item()
+        item2.title = "Buy Eggos"
+        strangerThings.append(item2)
+        
+        let item3 = Item()
+        item3.title = "Kill dermagogen"
+        strangerThings.append(item3)
+        
+        if let itemsList = defaults.array(forKey: "ToDolist") as? [Item]{
             strangerThings = itemsList
-        }
+//        }
     }
     
     //MARK - Table view data source
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoitemcell", for: indexPath)
         
-        cell.textLabel?.text = strangerThings[indexPath.row]
+        let itemsc = strangerThings[indexPath.row]
+        cell.textLabel?.text = itemsc.title
+        
+        cell.accessoryType = itemsc.done ? .checkmark : .none
         
         return cell
     }
@@ -38,14 +54,12 @@ class TodoViewController: UITableViewController {
     
     //MARK - Table view delegate method
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark{
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-        }else{
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-        }
+       
+        strangerThings[indexPath.row].done = !strangerThings[indexPath.row].done
+        
+        tableView.reloadData()
         
         tableView.deselectRow(at: indexPath, animated: true)
-        print(strangerThings[indexPath.row])
     }
     
     @IBAction func UIaddbtn(_ sender: UIBarButtonItem) {
@@ -55,7 +69,10 @@ class TodoViewController: UITableViewController {
         let uialert = UIAlertController.init(title: "Add ToDo Item", message: nil, preferredStyle: .alert)
         
         let uiaction = UIAlertAction.init(title: "Add Action", style:.default) { (action) in
-            self.strangerThings.append(txtfield.text!)
+            
+            let item = Item()
+            item.title = txtfield.text!
+            self.strangerThings.append(item)
             
             self.defaults.set(self.strangerThings, forKey: "ToDolist")
             self.tableView.reloadData()
