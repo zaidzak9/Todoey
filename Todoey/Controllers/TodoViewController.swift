@@ -32,7 +32,7 @@ class TodoViewController: UITableViewController {
         
         if let itemsList = defaults.array(forKey: "ToDolist") as? [Item]{
             strangerThings = itemsList
-//        }
+        }
     }
     
     //MARK - Table view data source
